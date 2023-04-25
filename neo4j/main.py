@@ -54,6 +54,7 @@ add_edges(driver, FolkMusic, [
 with open("data/csv/Song.csv", "r") as f:
     temp = f.readline()
     data = f.readlines()
+
 for item in data:
     line = item.strip().split(',')
     singerNode = Node("歌手", {'name': line[0], '演唱歌曲': line[1]})
@@ -75,32 +76,32 @@ with open("data/csv/TibetDance.csv", "r") as f:
 for item in data:
     line = item.strip().split(',')
 
-    node = Node("舞蹈", data = {
+    danceNode = Node("舞蹈", data = {
         "name": line[3],
         "非遗网站项目编号": line[2],
         "类别": line[4],
         "申报地区或单位": line[7],
     })
     danceTypeName = line[3].split('(')[0]
-    fa_node = Node("四级类别", {'name': danceTypeName})
+    faNode = Node("四级类别", {'name': danceTypeName})
 
-    add_node(driver, node)
-    add_node(driver, fa_node)
-    add_edge(driver, FolkDance, fa_node, "Subset")
-    add_edge(driver, fa_node, node, "Subset")
-# # 传承人
-# with open("data/csv/Successor.csv", "r") as f:
-#     temp = f.readline()
-#     data = f.readlines()
-# for item in data:
-#     line = item.strip().split(',')
-#     peopleName = line[1]
-#     peopleSex = line[2]
-#     danceName = line[6]
-#     danceNum = line[5]
-#     danceArea = line[7]
-#     peopleNode = Node("传承人", {'name': line[1], 'sex': line[2]})
-#     danceNode = Node("舞蹈", {'name': line[6], '非遗网站项目编号': line[5], '申报地区或单位': line[7]})
-#     add_node(driver, peopleNode)
-#     add_node(driver, danceNode)
-#     add_edge(driver, danceNode, peopleNode, "传承")
+    add_node(driver, danceNode)
+    add_node(driver, faNode)
+    add_edge(driver, FolkDance, faNode, "Subset")
+    add_edge(driver, faNode, danceNode, "Subset")
+# 传承人
+with open("data/csv/Successor.csv", "r") as f:
+    temp = f.readline()
+    data = f.readlines()
+for item in data:
+    line = item.strip().split(',')
+    peopleName = line[1]
+    peopleSex = line[2]
+    danceName = line[6]
+    danceNum = line[5]
+    danceArea = line[7]
+    peopleNode = Node("传承人", {'name': line[1], 'sex': line[2]})
+    danceNode = Node("舞蹈", {'name': line[6], '非遗网站项目编号': line[5], '申报地区或单位': line[7]})
+    add_node(driver, peopleNode)
+    add_node(driver, danceNode)
+    add_edge(driver, danceNode, peopleNode, "传承人")
