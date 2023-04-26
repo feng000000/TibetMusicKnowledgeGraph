@@ -59,7 +59,7 @@ SuccessorFile = f"{DATADIR}/csv/Successor.csv"
 TibetDramaFile = f"{DATADIR}/csv/TibetDrama.csv"
 
 # 歌曲歌手
-with open(SongFile, "r") as f:
+with open(SongFile, "r", encoding="utf8") as f:
     temp = f.readline()
     data = f.readlines()
 
@@ -77,7 +77,7 @@ for item in data:
 
 
 # 舞蹈
-with open(DanceFile, "r") as f:
+with open(DanceFile, "r", encoding="utf8") as f:
     temp = f.readline()
     data = f.readlines()
 
@@ -99,7 +99,7 @@ for item in data:
     add_edge(driver, faNode, danceNode, "Subset")
 
 # 传承人
-with open(SuccessorFile, "r") as f:
+with open(SuccessorFile, "r", encoding="utf8") as f:
     temp = f.readline()
     data = f.readlines()
 
@@ -118,7 +118,7 @@ for item in data:
 
 
 # 藏戏
-with open(TibetDramaFile, "r") as f:
+with open(TibetDramaFile, "r", encoding="utf8") as f:
     temp = f.readline()
     data = f.readlines()
 
