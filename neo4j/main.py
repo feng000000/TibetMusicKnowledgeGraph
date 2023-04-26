@@ -1,5 +1,4 @@
 from CypherOperator import *
-# import os
 
 # localhost
 driver = connect("bolt://localhost:7687", "neo4j", "neo4j@Feng0@@")
@@ -13,20 +12,24 @@ driver = connect("bolt://localhost:7687", "neo4j", "neo4j@Feng0@@")
 
 TibetMusic      = Node("一级类别", {'name': "西藏民族音乐"})
 
+# 西藏民族音乐
 FolkMusic       = Node("二级类别", {'name': "民间音乐"})
-TibetDramaMusic = Node("二级类别", {'name': "藏戏音乐"})
+TibetDrama      = Node("二级类别", {'name': "藏戏音乐"})
 PalaceMusic     = Node("二级类别", {'name': "宫廷音乐"})
 ReligiousMusic  = Node("二级类别", {'name': "宗教音乐"})
 
+# 民间音乐
 FolkDance       = Node("三级类别", {'name': "民间歌舞类"})
-FolkSong        = Node("三级类别", {'name': "民歌类"}  )    # todo
-LaborSong       = Node("三级类别", {'name': "劳动歌曲类"})  # todo
-RapSong         = Node("三级类别", {'name': "说唱音乐类"})  # todo
+FolkSong        = Node("三级类别", {'name': "民歌类"}  )
+LaborSong       = Node("三级类别", {'name': "劳动歌曲类"})
+RapSong         = Node("三级类别", {'name': "说唱音乐类"})
+
+
 
 add_node(driver, TibetMusic     )
 
 add_node(driver, FolkMusic      )
-add_node(driver, TibetDramaMusic)
+add_node(driver, TibetDrama)
 add_node(driver, PalaceMusic    )
 add_node(driver, ReligiousMusic )
 
@@ -37,7 +40,7 @@ add_node(driver, RapSong        )
 
 add_edges(driver, TibetMusic, [
         FolkMusic      ,
-        TibetDramaMusic,
+        TibetDrama,
         PalaceMusic    ,
         ReligiousMusic      ,
 ], "Subset")
@@ -82,26 +85,50 @@ for item in data:
         "类别": line[4],
         "申报地区或单位": line[7],
     })
-    danceTypeName = line[3].split('(')[0]
+    danceTypeName = line[3].split('(')[0].strip()
     faNode = Node("四级类别", {'name': danceTypeName})
 
     add_node(driver, danceNode)
     add_node(driver, faNode)
     add_edge(driver, FolkDance, faNode, "Subset")
     add_edge(driver, faNode, danceNode, "Subset")
+
 # 传承人
 with open("data/csv/Successor.csv", "r") as f:
     temp = f.readline()
     data = f.readlines()
+
 for item in data:
     line = item.strip().split(',')
-    peopleName = line[1]
-    peopleSex = line[2]
-    danceName = line[6]
-    danceNum = line[5]
-    danceArea = line[7]
-    peopleNode = Node("传承人", {'name': line[1], 'sex': line[2]})
-    danceNode = Node("舞蹈", {'name': line[6], '非遗网站项目编号': line[5], '申报地区或单位': line[7]})
+    peopleName = line[1].strip()
+    peopleSex = line[2].strip()
+    danceName = line[6].strip()
+    danceNum = line[5].strip()
+    danceArea = line[7].strip()
+    peopleNode = Node("传承人", {'name': peopleName, 'sex': peopleSex})
+    danceNode = Node("舞蹈", {'name': danceName, '非遗网站项目编号': danceNum, '申报地区或单位': danceArea})
     add_node(driver, peopleNode)
     add_node(driver, danceNode)
     add_edge(driver, danceNode, peopleNode, "传承人")
+
+
+# 藏戏
+with open("data/csv/TibetDrama.csv", "r") as f:
+    temp = f.readline()
+    data = f.readlines()
+
+for item in data:
+    line = item.strip().split(',')
+    fullName = line[3].strip()
+    type = line[4].strip()
+    area = line[7].strip()
+    if '(' in line[3]:
+        className = line[3].split('(')[1].split(')')[0]
+    else:
+        className = line[3]
+    dramaNode = Node('戏曲', {'name': fullName, '类别': type, '申报地区或单位': area})
+    classNode = Node('三级类别', {'name': className})
+    add_node(driver, dramaNode)
+    add_node(driver, classNode)
+    add_edge(driver, TibetDrama, classNode, "Subset")
+    add_edge(driver, classNode, dramaNode, "entity")
