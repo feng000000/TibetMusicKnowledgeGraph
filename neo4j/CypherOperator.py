@@ -43,9 +43,9 @@ def connect(uri, user, passwd):
 
 def operate(driver, command):
     """直接用命令操作"""
-    with open("./neo4j/CypherOperator.log", "a") as f:
-        f.write("operate: " + command + "\n")
-    # print("operate: ", command)
+    # with open("./neo4j/CypherOperator.log", "a") as f:
+    #     f.write("operate: " + command + "\n")
+    print("operate: ", command)
     with driver.session() as session:
         result = session.run(command)
         return [record for record in result]

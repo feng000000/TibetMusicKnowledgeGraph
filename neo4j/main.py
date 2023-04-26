@@ -39,10 +39,10 @@ add_node(driver, LaborSong      )
 add_node(driver, RapSong        )
 
 add_edges(driver, TibetMusic, [
-        FolkMusic      ,
-        TibetDrama,
-        PalaceMusic    ,
-        ReligiousMusic      ,
+        FolkMusic       ,
+        TibetDrama      ,
+        PalaceMusic     ,
+        ReligiousMusic  ,
 ], "Subset")
 
 add_edges(driver, FolkMusic, [
@@ -52,9 +52,14 @@ add_edges(driver, FolkMusic, [
         RapSong     ,
 ], "Subset")
 
+DATADIR = "/home/feng/Code/dachuang/data"
+SongFile = f"{DATADIR}/csv/Song.csv"
+DanceFile = f"{DATADIR}/csv/TibetDance.csv"
+SuccessorFile = f"{DATADIR}/csv/Successor.csv"
+TibetDramaFile = f"{DATADIR}/csv/TibetDrama.csv"
 
 # 歌曲歌手
-with open("data/csv/Song.csv", "r") as f:
+with open(SongFile, "r") as f:
     temp = f.readline()
     data = f.readlines()
 
@@ -72,7 +77,7 @@ for item in data:
 
 
 # 舞蹈
-with open("data/csv/TibetDance.csv", "r") as f:
+with open(DanceFile, "r") as f:
     temp = f.readline()
     data = f.readlines()
 
@@ -94,7 +99,7 @@ for item in data:
     add_edge(driver, faNode, danceNode, "Subset")
 
 # 传承人
-with open("data/csv/Successor.csv", "r") as f:
+with open(SuccessorFile, "r") as f:
     temp = f.readline()
     data = f.readlines()
 
@@ -113,7 +118,7 @@ for item in data:
 
 
 # 藏戏
-with open("data/csv/TibetDrama.csv", "r") as f:
+with open(TibetDramaFile, "r") as f:
     temp = f.readline()
     data = f.readlines()
 
@@ -132,3 +137,5 @@ for item in data:
     add_node(driver, classNode)
     add_edge(driver, TibetDrama, classNode, "Subset")
     add_edge(driver, classNode, dramaNode, "entity")
+
+print("update finished.")
